@@ -3,48 +3,13 @@
     <h1>관심항목 설정</h1>
       <div class="wrap">
         <h3>당신의 관심항목을 선택해주세요. (최대 4가지)</h3><hr>
-        <ul>
-          <li>
-            <input type="checkbox" id="type1" value="건조함" v-model="checkedNames">
-            <label for="type1">건조함</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type2" value="각질" v-model="checkedNames">
-            <label for="type2">각질</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type3" value="문제성 지성" v-model="checkedNames">
-            <label for="type3">문제성 지성</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type4" value="블랙 헤드" v-model="checkedNames">
-            <label for="type4">블랙 헤드</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type5" value="넓은 모공" v-model="checkedNames">
-            <label for="type5">넓은 모공</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type6" value="복합성" v-model="checkedNames">
-            <label for="type6">복합성</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type7" value="칙칙한 피부" v-model="checkedNames">
-            <label for="type7">칙칙한 피부</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type8" value="민감성 피부" v-model="checkedNames">
-            <label for="type8">민감성 피부</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type9" value="주름" v-model="checkedNames">
-            <label for="type9">주름</label>
-          </li>
-          <li>
-            <input type="checkbox" id="type10" value="홍조" v-model="checkedNames">
-            <label for="type10">홍조</label>
+        <ul @click="recheck">
+          <li v-for="(type, index) in typeList" :key='index'>
+            <input type="checkbox" v-bind:id="'type'+index" v-bind:value="type"  v-model="checkedNames" v-bind:disabled="maxValueCheck">
+            <label v-bind:for="'type'+index">{{type}}</label>
           </li>
         </ul>
+        <em v-if=maxValueCheck>최대 4개까지만 선택해주세요</em>
     </div>
   </div>
 </template>
@@ -53,7 +18,23 @@
 export default {
    data(){
     return {
-      checkedNames: []
+      typeList: ["건조함", "각질", "문제성 지성", "블랙 헤드", "넓은 모공","복합성", "칙칙한 피부", "민감성 피부", "주름", "홍조"],
+      checkedNames: [],
+      maxValueCheck: false
+    }
+  },
+  watch: {
+    checkedNames : function(val){
+      this.maxValueCheck = val.length >= 4 ? true : false
+    }
+  },
+  computed: {
+  },
+  methods: {
+    recheck : function(){
+      if (this.checkedNames.length >= 4) {
+        this.maxValueCheck = event.target.checked === false ? true : false 
+      } 
     }
   }
 }
@@ -64,23 +45,26 @@ export default {
   width: 550px;
   .wrap{
     background: #F5F5F5;
-    height: 450px;
+    height: 500px;
   }
   h3{
     text-align: center;
-    margin: 10px;
-    padding: 15px;
+    margin: 30px 10px 30px 10px;
+    padding: 40px 15px 15px 15px;
   }
   hr{
     margin-bottom: 40px;
   }
   li{
-    width: 50%;
+    width: 48%;
     float: left;
     font-size: 1.4rem;
     margin-bottom : 40px;
+    margin-left: 2%;
   }
-
+  em{
+    color: red;
+  }
   input[type="checkbox"] {
     display:none;
   }
@@ -94,7 +78,9 @@ export default {
   input[type='checkbox']:checked + label::before {
     background: url('../assets/checked.png') no-repeat;
   }
+// 모바일기기 대응을 위한 CSS
+ @media screen and (max-width: 999px){
+   width: 100%;
+ }
 }
-
-
 </style>
