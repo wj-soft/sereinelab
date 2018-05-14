@@ -1,4 +1,4 @@
-# serin
+# sereinelab
 
 > A Vue.js project
 

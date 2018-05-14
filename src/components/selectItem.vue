@@ -3,13 +3,16 @@
     <h1>관심항목 설정</h1>
       <div class="wrap">
         <h3>당신의 관심항목을 선택해주세요. (최대 4가지)</h3><hr>
-        <ul @click="recheck">
-          <li v-for="(type, index) in typeList" :key='index'>
-            <input type="checkbox" v-bind:id="'type'+index" v-bind:value="type"  v-model="checkedNames" v-bind:disabled="maxValueCheck">
+        <ul>
+          <li v-for="(type, index) in typeList" :key='index' v-bind:class="{unChecking : checkedNames.indexOf(type) == -1}">
+            <input type="checkbox" 
+              v-model="checkedNames" 
+              v-bind:id="'type'+index" 
+              v-bind:value="type"  
+              v-bind:disabled="checkboxStatus[index]">
             <label v-bind:for="'type'+index">{{type}}</label>
           </li>
         </ul>
-        <em v-if=maxValueCheck>최대 4개까지만 선택해주세요</em>
     </div>
   </div>
 </template>
@@ -19,23 +22,29 @@ export default {
    data(){
     return {
       typeList: ["건조함", "각질", "문제성 지성", "블랙 헤드", "넓은 모공","복합성", "칙칙한 피부", "민감성 피부", "주름", "홍조"],
-      checkedNames: [],
-      maxValueCheck: false
+      checkboxStatus: [false,false,false,false,false,false,false,false,false,false],
+      checkedNames: []
     }
   },
+  
   watch: {
     checkedNames : function(val){
-      this.maxValueCheck = val.length >= 4 ? true : false
-    }
+    	if ( val.length == 4 ) {
+      	for ( var i=0; this.typeList.length > i; i++ ) {
+        	if ( this.checkedNames.indexOf(this.typeList[i]) == -1 ) {
+          	this.checkboxStatus[i] = true;
+          } 
+        }
+      } else {
+      	for ( var j=0; this.typeList.length > j; j++ ) {
+        		this.checkboxStatus[j] = false;
+        }
+      }
+		}
   },
   computed: {
   },
   methods: {
-    recheck : function(){
-      if (this.checkedNames.length >= 4) {
-        this.maxValueCheck = event.target.checked === false ? true : false 
-      } 
-    }
   }
 }
 </script>
@@ -55,6 +64,9 @@ export default {
   hr{
     margin-bottom: 40px;
   }
+  ul{
+    padding: 0 10px 0 10px;
+  }
   li{
     width: 48%;
     float: left;
@@ -62,14 +74,11 @@ export default {
     margin-bottom : 40px;
     margin-left: 2%;
   }
-  em{
-    color: red;
-  }
   input[type="checkbox"] {
     display:none;
   }
   input[type='checkbox'] + label::before {
-    content: '  '; 
+    content: ' '; 
     display: inline-block; 
     width: 1.8rem; 
     height: 1.6rem;
@@ -78,9 +87,15 @@ export default {
   input[type='checkbox']:checked + label::before {
     background: url('../assets/checked.png') no-repeat;
   }
+  .unChecking{
+    color: #999999;
+  }
 // 모바일기기 대응을 위한 CSS
- @media screen and (max-width: 999px){
+ @media screen and (max-width: 768px){
    width: 100%;
+   li{
+     font-size: 1.2rem;
+   }
  }
 }
 </style>
