@@ -84,9 +84,11 @@ export default {
     width: 1.8rem; 
     height: 1.6rem;
     background: url('../assets/unchecked.png') no-repeat;
+    background: -webkit-image-set(url('../assets/unchecked.png') 1x no-repeat, url('../assets/unchecked@2x.png') 2x no-repeat);
   }
   input[type='checkbox']:checked + label::before {
     background: url('../assets/checked.png') no-repeat;
+    background: -webkit-image-set(url('../assets/checked.png') 1x no-repeat, url('../assets/checked@2x.png') 2x no-repeat);
   }
   .unChecking{
     color: #999999;
