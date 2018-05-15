@@ -78,8 +78,9 @@ export default {
     display:none;
   }
   input[type='checkbox'] + label::before {
-    content: ' '; 
+    content: ''; 
     display: inline-block; 
+    margin-right: 10px;
     width: 1.8rem; 
     height: 1.6rem;
     background: url('../assets/unchecked.png') no-repeat;
